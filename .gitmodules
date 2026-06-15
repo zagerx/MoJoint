@@ -1,0 +1,3 @@
+[submodule "MoJoint_Hardware"]
+	path = MoJoint_Hardware
+	url = git@github.com:zagerx/MoJoint_Hardware.git
