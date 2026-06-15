@@ -11,14 +11,14 @@ MoJoint 致力于打造一款高性能、模块化的机器人关节电机解决
 - **驱动器固件设计**：电机控制算法、通信协议与嵌入式软件。
 - **上位机工具链**：基于 ROS2 的接口节点与 QT 可视化上位机。
 
-本仓库作为项目的顶层管理仓库，用于统筹各子模块仓库、维护整体文档、追踪里程碑与发布版本。
+本仓库作为项目的顶层管理仓库，通过 Git Submodule 统筹各子模块仓库，维护整体文档、追踪里程碑与发布版本。
 
 ## 功能特性
 
 - 完整的关节电机软硬件参考设计
 - 模块化子仓库管理，便于独立开发与版本控制
 - 支持 ROS2 与 QT 上位机的实时调试与监控
-- 开放的文档与协作流程
+- 统一的文档入口与版本发布记录
 
 ## 仓库结构
 
@@ -26,50 +26,58 @@ MoJoint 致力于打造一款高性能、模块化的机器人关节电机解决
 MoJoint/
 ├── README.md                 # 项目总览（本文件）
 ├── docs/                     # 项目文档（架构、协议、开发指南）
-├── mojoint-motor/            # 电机本体设计子仓库（机械/电磁）
-├── mojoint-driver-hw/        # 驱动器硬件设计子仓库
-├── mojoint-driver-fw/        # 驱动器固件子仓库
-├── mojoint-tools-ros2/       # ROS2 接口工具子仓库
-└── mojoint-tools-gui/        # QT 上位机子仓库
+├── MoJoint_Hardware/         # 驱动器硬件设计子仓库
+├── MoJoint_Firmware/         # 驱动器固件子仓库
+├── MoJoint_Mechanics/        # 电机机械本体设计子仓库
+└── MoJoint_Tools/            # 上位机工具链子仓库（待接入）
 ```
-
-> 提示：当前子仓库尚未通过 Git Submodule 接入，后续可按照 [子仓库接入规范](#子仓库接入规范) 进行配置。
 
 ## 快速开始
 
-### 克隆项目
+### 克隆项目（包含所有子仓库）
 
 ```bash
-git clone https://github.com/your-org/MoJoint.git
+git clone --recursive git@github.com:zagerx/MoJoint.git
 cd MoJoint
 ```
 
-### 拉取子仓库（配置完成后）
+### 已克隆主仓库，单独拉取子仓库
 
 ```bash
+cd MoJoint
 git submodule update --init --recursive
 ```
 
 ### 文档入口
 
-- [项目架构](./docs/architecture.md)
-- [开发环境搭建](./docs/development.md)
-- [通信协议](./docs/protocol.md)
 - [版本发布说明](./docs/release-notes.md)
+- [项目架构](./docs/architecture.md)（待补充）
+- [开发环境搭建](./docs/development.md)（待补充）
+- [通信协议](./docs/protocol.md)（待补充）
 
-## 子仓库接入规范
+## 子仓库管理
 
-为了保持项目结构清晰，建议后续通过 Git Submodule 管理各子模块：
+当前已接入的子仓库：
+
+| 子仓库 | 本地路径 | 说明 |
+|--------|----------|------|
+| `MoJoint_Hardware` | `MoJoint_Hardware/` | 驱动器硬件设计 |
+| `MoJoint_Firmware` | `MoJoint_Firmware/` | 驱动器固件 |
+| `MoJoint_Mechanics` | `MoJoint_Mechanics/` | 电机机械本体设计 |
+
+### 新增子仓库
 
 ```bash
-git submodule add <子仓库地址> mojoint-motor
-git submodule add <子仓库地址> mojoint-driver-hw
-git submodule add <子仓库地址> mojoint-driver-fw
-git submodule add <子仓库地址> mojoint-tools-ros2
-git submodule add <子仓库地址> mojoint-tools-gui
+git submodule add git@github.com:zagerx/<RepoName>.git <RepoName>
+git add .gitmodules <RepoName>
+git commit -m "chore: 接入子模块<RepoName>"
 ```
 
-并在 CI 或文档中提供 `git clone --recursive` 或 `git submodule update --init --recursive` 的说明。
+### 更新所有子仓库到最新提交
+
+```bash
+git submodule update --remote
+```
 
 ---
 
